@@ -1,0 +1,103 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="w-100 d-flex justify-content-between align-items-center">
+                <div>
+                    <input type='text'
+                           style='padding:8px;margin:15px auto;width: 220px'
+                           placeholder='Type to filter the name column...'
+                           (keyup)='updateFilter($event)'/>
+                </div>
+                <a mat-fab color="warn" (click)="redirectNew()">
+                    <mat-icon style="color: white">add</mat-icon>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <ngx-datatable #table
+                           class="material"
+                           [rows]="rows"
+                           [columns]="columns"
+                           [columnMode]="'force'"
+                           [rowHeight]="'auto'"
+                           [headerHeight]="'auto'"
+                           (activate)="onRowClick($event)">
+
+                <!-- Row Detail -->
+                <ngx-datatable-row-detail *ngIf="expandable"
+                                          [rowHeight]="100"
+                                          #myDetailRow>
+
+                    <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                        <div style="padding-left:35px;" *ngIf="students[row?.id]">
+                            <div class="w-100">
+
+                                <div class="row m-0 p-0">
+                                    <div class="col-6" *ngFor="let studentsAr of students[row.id]; let index = index">
+                                        <ol>
+                                            {{students[row.id].length > 1 ? index === 0 ? 'Prenotati' : 'Presenti' : null}}
+                                            <li *ngFor="let student of studentsAr">
+                                                <div>
+                                                    {{student?.Nome}} {{student?.Cognome}}
+                                                </div>
+                                            </li>
+                                        </ol>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </ng-template>
+                </ngx-datatable-row-detail>
+                <!-- /Row Detail -->
+
+                <!-- Expand Column-->
+                <ngx-datatable-column *ngIf="expandable"
+                                      [width]="50"
+                                      [resizeable]="false"
+                                      [sortable]="false"
+                                      [draggable]="false"
+                                      [canAutoResize]="false">
+                    <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+                        <a
+                            href="javascript:void(0)"
+                            [class.datatable-icon-right]="!expanded"
+                            [class.datatable-icon-down]="expanded"
+                            title="Expand/Collapse Row"
+                            (click)="$event.stopPropagation();toggleExpandRow(row)">
+                        </a>
+                    </ng-template>
+                </ngx-datatable-column>
+                <!-- /Expand Column-->
+
+                <ngx-datatable-column *ngFor="let col of columns"
+                                      [prop]="col.prop"
+                                      [name]="col.name">
+                    <ng-template let-value="value"
+                                 ngx-datatable-cell-template>
+                        <span *ngIf="col.prop !== 'Link' && col.prop !== 'TelegramChatID'">
+                            {{col.prop === 'Data' ? (value | date:'d/M/yy, h:mm a') : value}}
+                        </span>
+                        <a (click)="$event.stopPropagation();"
+                           target="_blank"
+                           *ngIf="col.prop === 'Link'"
+                           [href]="value">
+                            {{value}}
+                        </a>
+
+                        <span *ngIf="col.prop === 'TelegramChatID'"
+                              class="colorful-box"
+                              [style.backgroundColor]="value > 0 ? 'green' : 'red'">
+                            {{value > 0 ? 'copy' : 'empty'}}
+                        </span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+            </ngx-datatable>
+        </div>
+    </div>
+</div>
+

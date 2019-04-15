@@ -1,0 +1,99 @@
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@import '~@angular/material/theming';
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat-core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$ng2angle-primary: mat-palette($mat-indigo);
+$ng2angle-accent: mat-palette($mat-pink, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$ng2angle-warn: mat-palette($mat-red);
+
+// Create the theme object (a Sass map containing all of the palettes).
+$ng2angle-theme: mat-light-theme($ng2angle-primary, $ng2angle-accent, $ng2angle-warn);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($ng2angle-theme);
+
+/* ========================================================================
+   Component: preloader
+ ========================================================================== */
+@import "../../shared/styles/bootstrap/_functions.scss";
+@import "../../shared/styles/bootstrap/_variables.scss";
+@import "../../shared/styles/bootstrap/_mixins";
+@import "../../shared/styles/app/variables";
+
+$preloader-bg: $info;
+$preloader-wd: 200px;
+$preloader-hg: 200px;
+
+/*@noflip*/
+.preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: $preloader-bg;
+    background-image: -webkit-linear-gradient(90deg, $preloader-bg 10%, darken($preloader-bg, 5%) 90%); /* Chrome 10+, Saf5.1+ */
+    background-image: -moz-linear-gradient(90deg, $preloader-bg 10%, darken($preloader-bg, 5%) 90%); /* FF3.6+ */
+    background-image: -ms-linear-gradient(90deg, $preloader-bg 10%, darken($preloader-bg, 5%) 90%); /* IE10 */
+    background-image: -o-linear-gradient(90deg, $preloader-bg 10%, darken($preloader-bg, 5%) 90%); /* Opera 11.10+ */
+    background-image: linear-gradient(90deg, $preloader-bg 10%, darken($preloader-bg, 5%) 90%); /* W3C */
+    z-index: 9999;
+    transition: opacity .65s;
+}
+
+/*@noflip*/
+.preloader-progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: $preloader-wd;
+    height: $preloader-hg;
+    margin: auto;
+    overflow: auto;
+    background-image: url(../../../assets/img/preloader/preloader.empty.jpg);
+    background-size: $preloader-wd $preloader-hg;
+}
+
+/*@noflip*/
+.preloader-progress-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    min-width: 10px;
+    background-image: url(../../../assets/img/preloader/preloader.full.jpg);
+    background-size: $preloader-wd $preloader-hg;
+}
+.preloader-hidden {
+    display: none;
+}
+// ngAnimate behavior
+.preloader-hidden-add {
+    opacity: 1;
+    display: block;
+
+    .preloader-progress {
+        transition: transform .4s ease;
+        transform: scale(0);
+    }
+}
+.preloader-hidden-add-active {
+    opacity: 0;
+}

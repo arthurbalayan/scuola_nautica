@@ -1,0 +1,55 @@
+<div class="container-fluid">
+    <form *ngIf="form"
+          (ngSubmit)="onSubmit()"
+          [formGroup]="form">
+
+        <div *ngIf="inputsArray">
+            <div *ngFor="let item of inputsArray" class="row">
+                <div class="col-12">
+
+                    <mat-form-field *ngIf="item !== 'Data'; else elsee"
+                                    class="min-width-300"
+                                    appearance="outline">
+
+                        <mat-label>{{item}}</mat-label>
+                        <input matInput type="text" [formControlName]="item" required />
+                        <mat-error *ngIf="form.get(item).hasError('email')">Not valid email</mat-error>
+                        <mat-error *ngIf="form.get(item).hasError('required')">Required Field</mat-error>
+                    </mat-form-field>
+
+                    <ng-template #elsee>
+                        <mat-form-field>
+                            <input matInput
+                                   [matDatepicker]="picker"
+                                   [formControlName]="item"
+                                   placeholder="Choose a date"
+                                   required>
+
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                            <mat-error *ngIf="form.get(item).hasError('required')">Required Field</mat-error>
+                        </mat-form-field>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="row" *ngIf="progressStatus">
+            <div class="co-12">
+                <div class="progress-container">
+                    <progressbar class="progress-striped active"
+                                 [value]="100"></progressbar>
+                </div>
+            </div>
+        </div>
+        <!-- /Progress Bar -->
+
+        <div class="row">
+            <div class="col-12">
+                <button mat-raised-button color="primary" style="margin-right: 10px">Save</button>
+                <button *ngIf="id" mat-raised-button color="warn" type="button" (click)="onDelete()">Delete</button>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,104 @@
+<div class="container-fluid">
+
+    <form *ngIf="form"
+          (ngSubmit)="onSubmit()"
+          [formGroup]="form">
+
+        <div class="row pb-3">
+            <div class="col-12 col-md-6">
+
+                <ngx-datatable class="material"
+                               [rows]="trainees"
+                               [columnMode]="'force'"
+                               [headerHeight]="50"
+                               [footerHeight]="50"
+                               [rowHeight]="'auto'"
+                               [limit]="5"
+                               [selected]="selected"
+                               [selectionType]="'checkbox'"
+                               [selectAllRowsOnPage]="false"
+                               [displayCheck]="displayCheck"
+                               (activate)="onActivate($event)"
+                               (select)='onSelect($event)'>
+
+                    <ngx-datatable-column [width]="30"
+                                          [sortable]="false"
+                                          [canAutoResize]="false"
+                                          [draggable]="false"
+                                          [resizeable]="false"
+                                          [headerCheckboxable]="true"
+                                          [checkboxable]="true">
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Nome" prop="Nome"></ngx-datatable-column>
+                    <ngx-datatable-column name="Cognome" prop="Cognome"></ngx-datatable-column>
+                </ngx-datatable>
+            </div>
+        </div>
+
+        <!--<mat-form-field appearance="outline" class="min-width-300">-->
+        <!--    <mat-label>Allievi</mat-label>-->
+        <!--    <mat-select [formControl]="selectedStudents" multiple required>-->
+        <!--        <mat-select-trigger>-->
+        <!--            {{selectedStudents.value ? selectedStudents.value[0]?.Nome + ' ' + selectedStudents.value[0]?.Cognome : ''}}-->
+        <!--            <span *ngIf="selectedStudents.value?.length > 1">-->
+        <!--                (+{{selectedStudents.value.length - 1}}-->
+        <!--                {{selectedStudents.value?.length === 2 ? 'other' : 'others'}})-->
+        <!--            </span>-->
+        <!--        </mat-select-trigger>-->
+        <!--        <mat-option *ngFor="let topping of trainees" [value]="topping">-->
+        <!--            {{topping.Nome + ' ' + topping.Cognome}}-->
+        <!--        </mat-option>-->
+        <!--    </mat-select>-->
+        <!--</mat-form-field>-->
+
+        <div *ngIf="inputsArray">
+            <div *ngFor="let item of inputsArray" class="row">
+                <div class="col-12 col-md-6">
+
+                    <mat-form-field *ngIf="item !== 'Data'; else elsee"
+                                    class="min-width-300"
+                                    appearance="outline">
+
+                        <mat-label>{{item}}</mat-label>
+                        <input matInput type="text" [formControlName]="item" required/>
+                        <mat-error *ngIf="form.get(item).hasError('email')">Not valid email</mat-error>
+                        <mat-error *ngIf="form.get(item).hasError('required')">Required Field</mat-error>
+                    </mat-form-field>
+
+                    <ng-template #elsee>
+                        <mat-form-field appearance="outline" class="min-width-300">
+                            <input matInput
+                                   [matDatepicker]="picker"
+                                   [formControlName]="item"
+                                   placeholder="Choose a date"
+                                   required>
+
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                            <mat-error *ngIf="form.get(item).hasError('required')">Required Field</mat-error>
+                        </mat-form-field>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="row" *ngIf="progressStatus">
+            <div class="co-12">
+                <div class="progress-container">
+                    <progressbar class="progress-striped active"
+                                 [value]="100"></progressbar>
+                </div>
+            </div>
+        </div>
+        <!-- /Progress Bar -->
+
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <button mat-raised-button color="primary" style="margin-right: 10px">Save</button>
+                <button *ngIf="id" mat-raised-button color="warn" type="button" (click)="onDelete()">Delete</button>
+            </div>
+        </div>
+    </form>
+</div>
+
